@@ -15,7 +15,7 @@ class Acesso {
 
 		//$con = mysqli_connect("mysql.hostinger.com.br","u580826224_admin","Digo3001","u580826224_df") or die ("erro".mysqli_error($con));
 
-		$con = mysqli_connect("localhost","root","123456","mob") or die ("erro".mysqli_error($con));
+		$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
 
 		return $con;
 
@@ -32,7 +32,7 @@ class Acesso {
 		while(($linha=mysqli_fetch_assoc($resultado)))
 		{
 			
-			$nome = $linha['nome'];
+			$nome = $linha['password'];
 
 			echo $nome;
 		}
@@ -56,6 +56,24 @@ class Acesso {
 		}
 	}
 
+	function buscaApelidoByCode($id)
+	{
+		global $con;
+
+		$query ="SELECT nome FROM usuarios WHERE usuario='$id'";
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+
+		while(($linha=mysqli_fetch_assoc($resultado)))
+		{
+			
+			$nome = $linha['aplido'];
+
+			return $nome;
+		}
+	}
+
 	function login($usuario, $senha)
 	{
 
@@ -67,7 +85,7 @@ class Acesso {
 
 		$linha=mysqli_fetch_assoc($resultado);
 
-		$senha_banco = $linha['password'];
+		$senha_banco = $linha['senha'];
 
 		if($senha == $senha_banco)
 
@@ -260,6 +278,24 @@ class Acesso {
 			$nome = $linha['nome'];
 
 			echo "<li><a href='blog.php?categoria=$id'>$nome</a></li>";
+		}
+	}
+
+	function buscaSelectCategorias()
+	{
+		global $con;
+
+		$query ="SELECT * FROM categorias";
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+
+		while(($linha=mysqli_fetch_assoc($resultado)))
+		{
+			$id = $linha['id'];
+			$nome = $linha['nome'];
+
+			echo "<option value='$id'>$nome</option>";
 		}
 	}
 

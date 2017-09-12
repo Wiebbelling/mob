@@ -13,7 +13,7 @@ session_name("adm");
 if(isset($_SESSION['validacao']))
 {
 	if($_SESSION['validacao'] == 1)
-		header("Location:cadastroPost.html");
+		header("Location:cadastroPost.php");
 }
 
 
@@ -25,7 +25,8 @@ if(isset($_POST['usuario']) && isset($_POST['senha']))
 	if($acesso->login($usuario,$senha))
 	{
 		$_SESSION['validacao'] = 1;
-		header("Location:cadastroPost.html");
+    $_SESSION['codigo'] = $usuario;
+		header("Location:cadastroPost.php");
 	}
 	else
 	{

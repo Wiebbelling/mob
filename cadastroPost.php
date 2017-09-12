@@ -1,7 +1,16 @@
 <?php
 include "acesso.php";
 $acesso = new acesso;
-$acesso->comectar();
+$acesso->conectar();
+
+
+
+if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria']) && isset($_POST['categoria']))
+
+
+
+
+
 
 ?>
 
@@ -11,7 +20,7 @@ $acesso->comectar();
 <html lang="en" class="wide wow-animation">
   <head>
     <!-- Site Title-->
-    <title>Login</title>
+    <title>Cadastro de Posts</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,6 +29,8 @@ $acesso->comectar();
     <!-- Stylesheets-->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900,300italic">
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 
 	</head>
 
@@ -68,7 +79,7 @@ $acesso->comectar();
                       <textarea name="textoPreview" form="cadastroPostForm" class="form-control"></textarea>
                     </div>
                     <div class="form-group">
-                      <button class="btn btn-sm btn-curious-blue-variant-2 btn-block" type="submit">Salvar</button>
+                      <button class="btn btn-sm btn-curious-blue-variant-2 btn-block" type="submit"><i class="material-icons">face</i></button>
                     </div>
                   </form>
                 </div>
