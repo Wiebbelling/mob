@@ -3,14 +3,29 @@ include "acesso.php";
 $acesso = new acesso;
 $acesso->conectar();
 
+session_start();
+session_name("adm");
 
+if(isset($_SESSION['validacao']))
+{
+  if($_SESSION['validacao'] != 1)
+    header("Location:login.php");
+}
+else
+{
+  header("Location:login.php"); 
+}
 
-if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria']) && isset($_POST['categoria']))
+if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria']) && isset($_POST['categoria']) && isset($_POST['textoPreview']))
+{
 
-
-
-
-
+  echo "Vai cadastrar:<br>";
+  echo "Titulo: ".$_POST['titulo'];
+  echo "<br>Texto: ".$_POST['texto'];
+  echo "<br>Categoria: ".$_POST['categoria'];
+  echo "<br>Texto Preview: ".$_POST['textoPreview'];
+  echo "<br>Usuário: ".$_SESSION['codigo'];
+}
 
 ?>
 

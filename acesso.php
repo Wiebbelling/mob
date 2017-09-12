@@ -6,7 +6,13 @@ class Acesso {
 	private static $con;
 
 	public $id;
+	public $usuario;
 	public $categoria;
+	public $foto; 
+	public $titulo; 
+	public $texto; 
+	public $fotoPreview; 
+	public $textoPreview;
 
 	function conectar()
 	{
@@ -100,10 +106,10 @@ class Acesso {
 	{
 	global $con;
 	$count = 0;
-	$query ="SELECT posts.id, titulo, foto, data, apelido, categorias.nome,textoPreview
+	$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.user  
+			LEFT JOIN usuarios ON usuarios.id = posts.usuario  
 			ORDER BY data DESC;";
 
 	$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -114,7 +120,7 @@ class Acesso {
 		$codigo = $linha['id'];
 		$titulo = $linha['titulo'];
 		$foto = $linha['foto'];
-		$data = $linha['data'];
+		$data = $linha['data_publicacao'];
 		$user = $linha['apelido'];
 		$categoria = $linha['nome'];
 		$texto = $linha['textoPreview'];
@@ -181,10 +187,10 @@ class Acesso {
 
 		global $con;
 
-		$query ="SELECT posts.id, texto, titulo, foto, data, apelido, categorias.nome,textoPreview
+		$query ="SELECT posts.id, texto, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.user 
+			LEFT JOIN usuarios ON usuarios.id = posts.usuario 
 			WHERE posts.id='$id'";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -195,7 +201,7 @@ class Acesso {
 			$codigo = $linha['id'];
 			$titulo = $linha['titulo'];
 			$foto = $linha['foto'];
-			$data = $linha['data'];
+			$data = $linha['data_publicacao'];
 			$user = $linha['apelido'];
 			$categoria = $linha['nome'];
 			$texto = $linha['texto'];
@@ -321,10 +327,10 @@ class Acesso {
 	{
 		global $con;
 
-		$query ="SELECT posts.id, titulo, foto, data, apelido, categorias.nome,textoPreview
+		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.user
+			LEFT JOIN usuarios ON usuarios.id = posts.usuario
 			WHERE categoria = '$categoria'";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -334,7 +340,7 @@ class Acesso {
 			$codigo = $linha['id'];
 			$titulo = $linha['titulo'];
 			$foto = $linha['foto'];
-			$data = $linha['data'];
+			$data = $linha['data_publicacao'];
 			$user = $linha['apelido'];
 			$categoria = $linha['nome'];
 			$texto = $linha['textoPreview'];
@@ -394,10 +400,10 @@ class Acesso {
 	{
 		global $con;
 
-		$query ="SELECT posts.id, titulo, foto, data, apelido, texto, categorias.nome,textoPreview,fotoPreview
+		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, texto, categorias.nome,textoPreview,fotoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.user ORDER BY data DESC";
+			LEFT JOIN usuarios ON usuarios.id = posts.usuario ORDER BY data DESC";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 
@@ -407,7 +413,7 @@ class Acesso {
 			$codigo = $linha['id'];
 			$titulo = $linha['titulo'];
 			$foto = $linha['foto'];
-			$data = $linha['data'];
+			$data = $linha['data_publicacao'];
 			$user = $linha['apelido'];
 			$categoria = $linha['nome'];
 			$texto = $linha['texto'];
@@ -437,7 +443,12 @@ class Acesso {
 		}
 	}
 
-	
+	// function cadastraNovoCase($foto, $titulo, $categoria, $texto, $usuario, $fotoPreview, $textoPreview)
+	// {
+	// 	global $con;
+
+	// 	$query ="INSERT INTO posts(foto, titulo, texto, categoria, usuario, data_publicacao, fotoPreview, textoPreview) VALUES ($foto,$titulo,$texto,$categoria,$usuario,CURDATE(),$fotoPreview,$textoPreview)";
+	// }
 
 }
 
