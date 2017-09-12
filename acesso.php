@@ -15,7 +15,7 @@ class Acesso {
 
 		//$con = mysqli_connect("mysql.hostinger.com.br","u580826224_admin","Digo3001","u580826224_df") or die ("erro".mysqli_error($con));
 
-		$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
+		$con = mysqli_connect("localhost","root","123456","mob") or die ("erro".mysqli_error($con));
 
 		return $con;
 
@@ -32,7 +32,7 @@ class Acesso {
 		while(($linha=mysqli_fetch_assoc($resultado)))
 		{
 			
-			$nome = $linha['password'];
+			$nome = $linha['nome'];
 
 			echo $nome;
 		}
@@ -85,7 +85,7 @@ class Acesso {
 
 		$linha=mysqli_fetch_assoc($resultado);
 
-		$senha_banco = $linha['senha'];
+		$senha_banco = $linha['password'];
 
 		if($senha == $senha_banco)
 
