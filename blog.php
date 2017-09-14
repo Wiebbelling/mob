@@ -7,6 +7,9 @@ $categoria = 0;
 if(isset($_GET['categoria']))
   $categoria = $_GET['categoria'];
 
+$page = 1;
+if(isset($_GET['pagina']))
+  $page = $_GET['pagina'];
 ?>
 
 
@@ -21,6 +24,7 @@ if(isset($_GET['categoria']))
     <meta charset="utf-8">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <!-- Stylesheets-->
+    
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900,300italic">
     <link rel="stylesheet" href="css/style.css">
 		<!--[if lt IE 10]>
@@ -234,11 +238,17 @@ if(isset($_GET['categoria']))
 
               <?php
               if($categoria)
-                $acesso->buscaCasesByCategory($categoria);
+                $numeroPaginas = $acesso->buscaCasesByCategory($categoria, $page);
               else
-                $acesso->buscaFirstsCases(); 
-              ?>
-                
+                $numeroPaginas = $acesso->buscaCasesByPage($page);
+              
+
+                $acesso->montaPagination($page, $numeroPaginas);
+
+
+
+                ?> 
+
               </div>
               <div class="cell-xs-12 cell-md-4 cell-lg-3 offset-top-60 offset-md-top-0">
                 <div class="inset-md-left-15 inset-md-right-10">
@@ -262,6 +272,7 @@ if(isset($_GET['categoria']))
                         <h4 class="text-bold">Recent Posts</h4>
                         <ul class="list-post-preview">
                         <?php $acesso->buscaPreviewCases(); ?>
+
                           <!-- <li>
                             <article class="post-preview">
                               <div class="unit unit-horizontal unit-spacing-sm">

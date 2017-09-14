@@ -10,7 +10,7 @@ $acesso->conectar();
 session_start();
 session_name("adm");
 
-if(isset($_SESSION['validacao']))
+if(isset($_SESSION['validacao']) && isset($_SESSION['codigo']))
 {
 	if($_SESSION['validacao'] == 1)
 		header("Location:cadastroPost.php");

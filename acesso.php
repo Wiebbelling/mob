@@ -104,35 +104,102 @@ class Acesso {
 			return 0;
 	}
 
-	function montaPagination($page)
+	function montaPagination($page, $numeroPaginas)
 	{
-
-		global $con;
-
-		$query="SELECT COUNT(id) FROM posts";
-
-		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
-
-		$linha=mysqli_fetch_assoc($resultado);
-
-		$paginas = $linha['COUNT(id)'];
+		 echo "<nav aria-label='...'><ul class='pagination'>";
+		 $next = $page+1;
+		 $previous = $page-1;
 
 
+             if($numeroPaginas == 2)
+             {
+             	
+             	if($page == 1)
+             	{
+             		echo "<li class='page-item disabled'><a class='page-link' href='blog.php?pagina=1' tabindex='-1'>Previous</a></li>";
+             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=1'>1</a></li>";
+             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=2'>2</a></li>";
+             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=2'>Next</a></li>";
+               	}
+               	else
+               	{
+               		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=1' tabindex='-1'>Previous</a></li>";
+             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=1'>1</a></li>";
+             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=2'>2</a></li>";
+             		echo "<li class='page-item disabled'><a class='page-link' href='blog.php?pagina=2'>Next</a></li>";
+               	}
+             }
+             else
+             {
+	             if($numeroPaginas == 3)
+	             {
+	             	
+	             	if($page == 1)
+	             	{
+	             		echo "<li class='page-item disabled'><a class='page-link' href='blog.php?pagina=1' tabindex='-1'>Previous</a></li>";
+	             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=1'>1</a></li>";
+	             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=2'>2</a></li>";
+	             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=3'>3</a></li>";
+	             		echo "<li class='page-item normal'> <a class='page-link' href='blog.php?pagina=2'>Next</a></li>";
+	               	}
+	               	else 
+	               	{
+		               	if($page = 2)
+		               	{
+		               		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=1' tabindex='-1'>Previous</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=1'>1</a></li>";
+		             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=2'>2</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=3'>3</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=3'>Next</a></li>";
+		               	}
+		               	else
+		               	{
+		               		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=2' tabindex='-1'>Previous</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=1'>1</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=2'>2</a></li>";
+		             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=3'>3</a></li>";
+		             		echo "<li class='page-item disabled'><a class='page-link' href='blog.php?pagina=3'>Next</a></li>";
+		               	}
+		            }
+	             }
+	             else
+	             {
+		            if($numeroPaginas > 3)
+		            {
+		             	if($page == 1) //primeira página
+		             	{
+		             		echo "<li class='page-item disabled'><a class='page-link' href='blog.php?pagina=".$page."' tabindex='-1'>Previous</a></li>";
+		             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=1'>1</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=2'>2</a></li>";
+		             		echo "<li class='page-item disabled'><a class='page-link' href='#'>...</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$numeroPaginas."'>".$numeroPaginas."</a></li>";
+		             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$next."'>Next</a></li>";
+		             	}
+		             	else
+		             	{
+			             	if($page == $numeroPaginas) //ultima página
+			             	{
+			             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$previous."' tabindex='-1'>Previous</a></li>";
+			             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=1'>1</a></li>";
+			             		echo "<li class='page-item disabled'><a class='page-link' href='#'>...</a></li>";
+			             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$previous."'>".$previous."</a></li>";
+			             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=".$page."'>".$page."</a></li>";
+			             		echo "<li class='page-item disabled'><a class='page-link' href='blog.php?pagina=".$next."'>Next</a></li>";
+			             	}
+			             	else
+			             	{
+			             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$previous."' tabindex='-1'>Previous</a></li>";
+			             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$previous."'>".$previous."</a></li>";
+			             		echo "<li class='page-item active'><a class='page-link' href='blog.php?pagina=".$page."'>".$page."</a></li>";
+			             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$next."'>".$next."</a></li>";
+			             		echo "<li class='page-item normal'><a class='page-link' href='blog.php?pagina=".$next."'>Next</a></li>";
+			             	}
+			            }
+		            }
+		        }
+		    }
 
-		 echo "
-		 <nav aria-label='...'>
-             <ul class='pagination pagination-md'>
-               <li class='page-item'>
-                 <a class='page-link' href='blog.php?pagina='<?php echo $page-1; ?> tabindex='-1'>Previous</a>
-               </li>
-               <li class='page-item'><a class='page-link' href='blog.php?pagina=1'>1</a></li>
-               <li class='page-item'><a class='page-link' href='blog.php?pagina=2'>2</a></li>
-               <li class='page-item'><a class='page-link' href='blog.php?pagina=3'>3</a></li>
-               <li class='page-item'><a class='page-link' href='blog.php?pagina=4'>4</a></li>
-                <li class='page-item'> <a class='page-link' href='blog.php?pagina='<?php echo $page+1;?>>Next</a>
-               </li>
-             </ul>
-           </nav>";
+        echo "</ul></nav>";
 
 	}
 
@@ -142,7 +209,7 @@ class Acesso {
 		global $con;
 
 		$page--;
-		$offset = $page*4;s
+		$offset = $page*4;
 		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 				FROM posts 
 				LEFT JOIN categorias ON categorias.id = posts.categoria 
@@ -210,7 +277,11 @@ class Acesso {
 		                </article> ";
 		}
 
-		return 1;
+		$query = "SELECT COUNT(id) FROM posts";
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+		$linha=mysqli_fetch_assoc($resultado);
+
+		return $linha['COUNT(id)'];
 	}
 
 	function buscaFirstsCases()
@@ -434,15 +505,16 @@ class Acesso {
 		}
 	}
 
-	function buscaCasesByCategory($categoria)
+	function buscaCasesByCategory($categoria, $page)
 	{
 		global $con;
-
+		$page--;
+		$offset = $page*4;
 		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
 			LEFT JOIN usuarios ON usuarios.id = posts.usuario
-			WHERE categoria = '$categoria'";
+			WHERE categoria = '$categoria' LIMIT 4 OFFSET $offset;";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 
@@ -505,6 +577,13 @@ class Acesso {
 
 
 		}
+
+		$query = "SELECT COUNT(id) FROM posts WHERE categoria = '$categoria'";
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+		$linha=mysqli_fetch_assoc($resultado);
+
+		return $linha['COUNT(id)'];
+
 	}
 
 	function buscaPreviewCases()

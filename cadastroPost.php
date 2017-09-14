@@ -8,7 +8,7 @@ session_name("adm");
 
 if(isset($_SESSION['validacao']))
 {
-  if($_SESSION['validacao'] != 1)
+  if($_SESSION['validacao'] != 1 || !isset($_SESSION['codigo']))
     header("Location:login.php");
 }
 else
@@ -16,8 +16,27 @@ else
   header("Location:login.php"); 
 }
 
-if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria']) && isset($_POST['categoria']) && isset($_POST['textoPreview']))
+if(    isset($_POST['titulo']) 
+    && isset($_POST['texto']) 
+    && isset($_POST['categoria']) 
+    && isset($_POST['categoria']) 
+    && isset($_POST['textoPreview']) 
+    && isset($_FILES['foto']) 
+    && isset($_FILES['fotoPreview']))
 {
+
+
+  $imagemPrincipal = "images/".$_FILES["foto"]["name"];
+  $imagemPreview = "images/".$_FILES['fotoPreview']['name'];
+
+  move_uploaded_file($_FILES["foto"]["tmp_name"], $imagemPrincipal);
+  move_uploaded_file($_FILES['fotoPreview']["tmp_name"], $imagemPreview);
+
+  $acesso->cadastraNovoCase($imagemPrincipal, $_POST['titulo'], $_POST['categoria'], $_POST['texto'], $_SESSION['codigo'], $imagemPreview, $_POST['textoPreview']);
+
+
+
+
 
   echo "Vai cadastrar:<br>";
   echo "Titulo: ".$_POST['titulo'];
@@ -25,6 +44,8 @@ if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria'
   echo "<br>Categoria: ".$_POST['categoria'];
   echo "<br>Texto Preview: ".$_POST['textoPreview'];
   echo "<br>Usuário: ".$_SESSION['codigo'];
+  echo "Foto Principal: ".$_FILES['foto']['name'];
+  echo "Foto Preview: ".$_FILES['fotoPreview']['name'];
 }
 
 ?>
@@ -63,21 +84,23 @@ if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria'
             <div class="range range-xs-center">
               <div class="cell-xs-10 cell-sm-6 offset-top-25">
                 <div class="inset-sm-left-15 inset-sm-right-25 offset-top-22">
-                  <form method="post" action="" id="cadastroPostForm">
+                  <form method="post" action="" id="cadastroPostForm" enctype="multipart/form-data">
                     <div class="form-group">
-                      <label for="foto" class="form-label-outside">Foto:</label>
-                      <input id="foto" type="file" name="foto">
+                      <label for="foto" class="form-label-outside"><h6>Foto(870x412):</h6></label><br>
+                      <label class="btn btn-default btn-file btn-curious-blue-variant-2">
+                          Selecionar Arquivo <input type="file" id="foto" name="foto" style="display: none;">
+                      </label>
                     </div>
                     <div class="form-group">
-                      <label for="titulo" class="form-label-outside">Título</label>
+                      <label for="titulo" class="form-label-outside"><h6>Título:</h6></label>
                       <input id="titulo" type="text" name="titulo" class="form-control">
                     </div>
                     <div class="form-group">
-                      <label for="texto" class="form-label-outside">Texto</label>
+                      <label for="texto" class="form-label-outside"><h6>Texto:</h6></label>
                       <textarea name="texto" form="cadastroPostForm" class="form-control"></textarea>
                     </div>
                   	<div class="form-group">
-                      <label for="categoira" class="form-label-outside">Categoria</label>
+                      <label for="categoira" class="form-label-outside"><h6>Categoria:</h6></label>
                       <select id="categoira" name="categoria">
                       	<?php 
                       	$acesso->buscaSelectCategorias();
@@ -86,15 +109,18 @@ if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria'
                       </select>
                     </div>
                     <div class="form-group">
-                      <label for="fotoPreview" class="form-label-outside">Foto Preview:</label>
-                      <input id="fotoPreview" type="file" name="fotoPreview">
+                      <label for="fotoPreview" class="form-label-outside"><h6>Foto Preview(70x70):</h6></label><br>
+                      <label class="btn btn-default btn-file btn-curious-blue-variant-2">
+                          Selecionar Arquivo <input type="file" id="fotoPreview" name="fotoPreview" style="display: none;">
+                      </label>
+
                     </div>
                     <div class="form-group">
-                      <label for="textoPreview" class="form-label-outside">Texto de Preview</label>
+                      <label for="textoPreview" class="form-label-outside"><h6>Texto de Preview:</h6></label>
                       <textarea name="textoPreview" form="cadastroPostForm" class="form-control"></textarea>
                     </div>
                     <div class="form-group">
-                      <button class="btn btn-sm btn-curious-blue-variant-2 btn-block" type="submit"><i class="material-icons">face</i></button>
+                      <button class="btn btn-sm btn-curious-blue-variant-2" type="submit">Publicar</button> 
                     </div>
                   </form>
                 </div>
@@ -103,7 +129,7 @@ if(isset($_POST['titulo']) && isset($_POST['texto']) && isset($_POST['categoria'
           </div>
         </section>
 
-        
+        <!-- <i class="material-icons">save</i> -->
 
         <!-- Feedback Form-->
         
