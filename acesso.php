@@ -7,11 +7,13 @@ class Acesso {
 
 	public $id;
 	public $usuario;
+	public $cat;
 	public $categoria;
 	public $foto; 
 	public $titulo; 
 	public $texto; 
 	public $fotoPreview; 
+	public $page;
 	public $textoPreview;
 
 	function conectar()
@@ -21,7 +23,7 @@ class Acesso {
 
 		//$con = mysqli_connect("mysql.hostinger.com.br","u580826224_admin","Digo3001","u580826224_df") or die ("erro".mysqli_error($con));
 
-		$con = mysqli_connect("localhost","root","123456","mob") or die ("erro".mysqli_error($con));
+		$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
 
 		return $con;
 
@@ -102,6 +104,115 @@ class Acesso {
 			return 0;
 	}
 
+	function montaPagination($page)
+	{
+
+		global $con;
+
+		$query="SELECT COUNT(id) FROM posts";
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		$linha=mysqli_fetch_assoc($resultado);
+
+		$paginas = $linha['COUNT(id)'];
+
+
+
+		 echo "
+		 <nav aria-label='...'>
+             <ul class='pagination pagination-md'>
+               <li class='page-item'>
+                 <a class='page-link' href='blog.php?pagina='<?php echo $page-1; ?> tabindex='-1'>Previous</a>
+               </li>
+               <li class='page-item'><a class='page-link' href='blog.php?pagina=1'>1</a></li>
+               <li class='page-item'><a class='page-link' href='blog.php?pagina=2'>2</a></li>
+               <li class='page-item'><a class='page-link' href='blog.php?pagina=3'>3</a></li>
+               <li class='page-item'><a class='page-link' href='blog.php?pagina=4'>4</a></li>
+                <li class='page-item'> <a class='page-link' href='blog.php?pagina='<?php echo $page+1;?>>Next</a>
+               </li>
+             </ul>
+           </nav>";
+
+	}
+
+
+	function buscaCasesByPage($page)
+	{
+		global $con;
+
+		$page--;
+		$offset = $page*4;s
+		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
+				FROM posts 
+				LEFT JOIN categorias ON categorias.id = posts.categoria 
+				LEFT JOIN usuarios ON usuarios.id = posts.usuario  
+				ORDER BY data_publicacao DESC LIMIT 4 OFFSET $offset;";
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+
+		while(($linha=mysqli_fetch_assoc($resultado)))
+		{
+			$codigo = $linha['id'];
+			$titulo = $linha['titulo'];
+			$foto = $linha['foto'];
+			$data = $linha['data_publicacao'];
+			$user = $linha['apelido'];
+			$categoria = $linha['nome'];
+			$texto = $linha['textoPreview'];
+
+
+			echo "
+						<article class='post'>
+		                  <div class='post-image'>
+		                    <figure><img src='$foto' alt='' width='870' height='412'/> 
+		                    </figure>
+		                  </div>
+		                  <div class='post-heading'>
+		                    <h3><a href='blog-post.html'>$titulo</a></h3>
+		                  </div>
+		                  <div class='post-meta'>
+		                    <ul class='list-meta'>
+		                      <li>
+		                        <dl class='list-terms-inline'>
+		                          <dt>Date</dt>
+		                          <dd>
+		                            <time datetime='2016-01-22'>$data</time>
+		                          </dd>
+		                        </dl>
+		                      </li>
+		                      <li>
+		                        <dl class='list-terms-inline'>
+		                          <dt>Posted by</dt>
+		                          <dd>$user</dd>
+		                        </dl>
+		                      </li>
+		                      <li>
+		                        <dl class='list-terms-inline'>
+		                          <dt>Comments</dt>
+		                          <dd>2</dd>
+		                        </dl>
+		                      </li>
+		                      <li>
+		                        <dl class='list-terms-inline'>
+		                          <dt>Category</dt>
+		                          <dd>$categoria</dd>
+		                        </dl>
+		                      </li>
+		                    </ul>
+		                    <hr class='hr-gray-lighter'>
+		                  </div>
+		                  <div class='post-body'>
+		                    <p>
+		                      $texto</p><a href='blog-post.php?codigo=$codigo' class='btn btn-sm btn-curious-blue-outline'>Read More</a>
+		                  </div>
+		                </article> ";
+		}
+
+		return 1;
+	}
+
 	function buscaFirstsCases()
 	{
 	global $con;
@@ -110,7 +221,7 @@ class Acesso {
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
 			LEFT JOIN usuarios ON usuarios.id = posts.usuario  
-			ORDER BY data DESC;";
+			ORDER BY data_publicacao DESC;";
 
 	$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 
@@ -398,17 +509,18 @@ class Acesso {
 
 	function buscaPreviewCases()
 	{
-		global $con;
 
+		global $con;
+		$count = 0;
 		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, texto, categorias.nome,textoPreview,fotoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.usuario ORDER BY data DESC";
+			LEFT JOIN usuarios ON usuarios.id = posts.usuario ORDER BY data_publicacao DESC";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 
 
-		while(($linha=mysqli_fetch_assoc($resultado)))
+		while(($linha=mysqli_fetch_assoc($resultado)) && $count < 3)
 		{
 			$codigo = $linha['id'];
 			$titulo = $linha['titulo'];
@@ -440,15 +552,18 @@ class Acesso {
                               </div>
                             </article>
                           </li>";
+                   $count++;
 		}
 	}
 
-	// function cadastraNovoCase($foto, $titulo, $categoria, $texto, $usuario, $fotoPreview, $textoPreview)
-	// {
-	// 	global $con;
+	function cadastraNovoCase($foto, $titulo, $cat, $texto, $usuario, $fotoPreview, $textoPreview)
+	{
+		global $con;
 
-	// 	$query ="INSERT INTO posts(foto, titulo, texto, categoria, usuario, data_publicacao, fotoPreview, textoPreview) VALUES ($foto,$titulo,$texto,$categoria,$usuario,CURDATE(),$fotoPreview,$textoPreview)";
-	// }
+		$query ="INSERT INTO posts(foto, titulo, texto, categoria, usuario, data_publicacao, fotoPreview, textoPreview) VALUES ('$foto','$titulo','$texto','$cat','$usuario',CURDATE(),'$fotoPreview','$textoPreview')";
+
+		$resultado = mysqli_query($con,$query) or die("erro efetuando cadastro de post".mysqli_error($con));
+	}
 
 }
 
