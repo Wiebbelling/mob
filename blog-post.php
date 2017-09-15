@@ -221,7 +221,7 @@ else
               <div class="cell-xs-12">
                 <ul class="breadcrumbs-custom">
                   <li><a href="index.html">Home</a></li>
-                  <li><a href="blog.html">Blog</a></li>
+                  <li><a href="blog.php">Blog</a></li>
                   <li class="active">Blog post</li>
                 </ul>
               </div>

@@ -21,7 +21,7 @@ class Acesso {
 
 		global $con;
 
-		//$con = mysqli_connect("mysql.hostinger.com.br","u580826224_admin","Digo3001","u580826224_df") or die ("erro".mysqli_error($con));
+		// $con = mysqli_connect("mysql.hostinger.com.br","u580826224_mob","123456","u580826224_mob") or die ("erro".mysqli_error($con));
 
 		$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
 
@@ -237,7 +237,7 @@ class Acesso {
 		                    </figure>
 		                  </div>
 		                  <div class='post-heading'>
-		                    <h3><a href='blog-post.html'>$titulo</a></h3>
+		                    <h3><a href='blog-post.php?codigo=$codigo'>$titulo</a></h3>
 		                  </div>
 		                  <div class='post-meta'>
 		                    <ul class='list-meta'>
@@ -281,7 +281,11 @@ class Acesso {
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 		$linha=mysqli_fetch_assoc($resultado);
 
-		return $linha['COUNT(id)'];
+		$retorno = (int) ($linha['COUNT(id)']/4);
+	
+		if($linha['COUNT(id)']%4)
+			$retorno = $retorno + 1;
+		return $retorno;
 	}
 
 	function buscaFirstsCases()
@@ -315,7 +319,7 @@ class Acesso {
 	                    </figure>
 	                  </div>
 	                  <div class='post-heading'>
-	                    <h3><a href='blog-post.html'>$titulo</a></h3>
+	                    <h3><a href='blog-post.php?codigo=$codigo'>$titulo</a></h3>
 	                  </div>
 	                  <div class='post-meta'>
 	                    <ul class='list-meta'>
@@ -395,7 +399,7 @@ class Acesso {
 		                    </figure>
 		                  </div>
 		                  <div class='post-heading'>
-		                    <h3><a href='blog-post.html'>$titulo</a></h3>
+		                    <h3><a href='blog-post.php?codigo=$codigo'>$titulo</a></h3>
 		                  </div>
 		                  <div class='post-meta'>
 		                    <ul class='list-meta'>
@@ -536,7 +540,7 @@ class Acesso {
 		                    </figure>
 		                  </div>
 		                  <div class='post-heading'>
-		                    <h3><a href='blog-post.html'>$titulo</a></h3>
+		                    <h3><a href='blog-post.php?codigo=$codigo'>$titulo</a></h3>
 		                  </div>
 		                  <div class='post-meta'>
 		                    <ul class='list-meta'>
@@ -582,7 +586,16 @@ class Acesso {
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 		$linha=mysqli_fetch_assoc($resultado);
 
-		return $linha['COUNT(id)'];
+
+
+		$retorno = (int) ($linha['COUNT(id)']/4);
+
+		if($linha['COUNT(id)']%4)
+			$retorno = $retorno + 1;
+		
+
+
+		return $retorno;
 
 	}
 
