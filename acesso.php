@@ -46,6 +46,84 @@ class Acesso {
 		}
 	}
 
+	function listaPosts()
+	{
+
+		global $con;
+
+		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
+				FROM posts 
+				LEFT JOIN categorias ON categorias.id = posts.categoria 
+				LEFT JOIN usuarios ON usuarios.id = posts.usuario";
+		
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		while(($linha=mysqli_fetch_assoc($resultado)))
+		{
+			$codigo = $linha['id'];
+			$titulo = $linha['titulo'];
+			$data = $linha['data_publicacao'];
+			$user = $linha['apelido'];
+			$categoria = $linha['nome'];
+
+			echo "<tr>
+	                        <td>$codigo</td>
+	                        <td>$titulo</td>
+	                        <td>$user</td>
+	                        <td>$categoria</td>
+	                        <td>$data</td>
+	                        <td style='text-align: right;'><a href=''><i class='material-icons'>mode_edit</i></a></td>
+	                        <td style='text-align: right;'><a href=''><i class='material-icons'>delete_forever</i></a></td>
+	                      </tr>";
+	    }
+	}
+
+	function listaCategorias()
+	{
+
+		global $con;
+
+		$query ="SELECT * FROM categorias";
+		
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		while(($linha=mysqli_fetch_assoc($resultado)))
+		{
+			$codigo = $linha['id'];
+			$titulo = $linha['nome'];
+
+			echo "<tr>
+	                        <td>$codigo</td>
+	                        <td>$titulo</td>
+	                        <td style='text-align: right;'><a href=''><i class='material-icons'>mode_edit</i></a></td>
+	                        <td style='text-align: right;'><a href=''><i class='material-icons'>delete_forever</i></a></td>
+	                      </tr>";
+	    }
+	}
+
+	function listaTags()
+	{
+
+		global $con;
+
+		$query ="SELECT * FROM tags";
+		
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		while(($linha=mysqli_fetch_assoc($resultado)))
+		{
+			$codigo = $linha['id'];
+			$titulo = $linha['nome'];
+
+			echo "<tr>
+	                        <td>$codigo</td>
+	                        <td>$titulo</td>
+	                        <td style='text-align: right;'><a href=''><i class='material-icons'>mode_edit</i></a></td>
+	                        <td style='text-align: right;'><a href=''><i class='material-icons'>delete_forever</i></a></td>
+	                      </tr>";
+	    }
+	}
+
 	function buscaUserById($id)
 	{
 		global $con;
@@ -233,7 +311,7 @@ class Acesso {
 			echo "
 						<article class='post'>
 		                  <div class='post-image'>
-		                    <figure><img src='$foto' alt='' width='870' height='412'/> 
+		                    <figure><img src='$foto' alt='' widtd='870' height='412'/> 
 		                    </figure>
 		                  </div>
 		                  <div class='post-heading'>
@@ -315,7 +393,7 @@ class Acesso {
 		echo "
 					<article class='post'>
 	                  <div class='post-image'>
-	                    <figure><img src='$foto' alt='' width='870' height='412'/> 
+	                    <figure><img src='$foto' alt='' widtd='870' height='412'/> 
 	                    </figure>
 	                  </div>
 	                  <div class='post-heading'>
@@ -395,7 +473,7 @@ class Acesso {
 			echo "
 						<article class='post'>
 		                  <div class='post-image'>
-		                    <figure><img src='$foto' alt='' width='870' height='412'/> 
+		                    <figure><img src='$foto' alt='' widtd='870' height='412'/> 
 		                    </figure>
 		                  </div>
 		                  <div class='post-heading'>
@@ -536,7 +614,7 @@ class Acesso {
 			echo "
 						<article class='post'>
 		                  <div class='post-image'>
-		                    <figure><img src='$foto' alt='' width='870' height='412'/> 
+		                    <figure><img src='$foto' alt='' widtd='870' height='412'/> 
 		                    </figure>
 		                  </div>
 		                  <div class='post-heading'>
@@ -629,7 +707,7 @@ class Acesso {
                               <div class='unit unit-horizontal unit-spacing-sm'>
                                 <div class='unit-left'>
                                   <div class='post-preview-image'>
-                                    <figure><img src='$imagePreview' alt='' width='70'/>
+                                    <figure><img src='$imagePreview' alt='' widtd='70'/>
                                     </figure>
                                   </div>
                                 </div>
