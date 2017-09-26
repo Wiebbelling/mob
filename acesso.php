@@ -72,12 +72,43 @@ class Acesso {
 	                        <td>$user</td>
 	                        <td>$categoria</td>
 	                        <td>$data</td>
-	                        <td style='text-align: right;'><a href=''><i class='material-icons'>mode_edit</i></a></td>
-	                        <td style='text-align: right;'><a href=''><i class='material-icons'>delete_forever</i></a></td>
+	                        <td style='text-align: right;'><a href='carregaPost.php?codigo=$codigo'><i class='material-icons'>mode_edit</i></a></td>
+	                        <td style='text-align: right;'><a href='deletaDados.php?tipo=0&codigo=$codigo'><i class='material-icons'>delete_forever</i></a></td>
 	                      </tr>";
 	    }
 	}
 
+	function carregaPostById($id)
+	{
+		global $con;
+
+		$query ="SELECT posts.id, posts.categoria, texto, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview, fotoPreview
+			FROM posts 
+			LEFT JOIN categorias ON categorias.id = posts.categoria 
+			LEFT JOIN usuarios ON usuarios.id = posts.usuario 
+			WHERE posts.id='$id'";
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		$linha=mysqli_fetch_assoc($resultado);
+
+		return $linha;
+	}
+
+	function salvaCase($id, $foto, $titulo, $cat, $texto, $usuario, $fotoPreview, $textoPreview)
+	{
+		global $con;
+		$titulo =  str_replace("'"," ",$titulo);
+		$texto =  str_replace("'"," ",$texto);
+		$textoPreview =  str_replace("'"," ",$textoPreview);
+
+		$query = "UPDATE posts SET foto='$foto',titulo='$titulo',texto='$texto',categoria='$cat',usuario='$usuario',data_publicacao=CURDATE(),fotoPreview='$fotoPreview',textoPreview='$textoPreview' WHERE id='$id'";
+
+		$resultado = mysqli_query($con,$query) or die("erro efetuando update de post".mysqli_error($con));
+
+		return 3;
+	}
+	
 	function listaCategorias()
 	{
 
@@ -95,8 +126,8 @@ class Acesso {
 			echo "<tr>
 	                        <td>$codigo</td>
 	                        <td>$titulo</td>
-	                        <td style='text-align: right;'><a href=''><i class='material-icons'>mode_edit</i></a></td>
-	                        <td style='text-align: right;'><a href=''><i class='material-icons'>delete_forever</i></a></td>
+	                        <td style='text-align: right;'></td>
+	                        <td style='text-align: right;'><a href='deletaDados.php?tipo=1&codigo=$codigo'><i class='material-icons'>delete_forever</i></a></td>
 	                      </tr>";
 	    }
 	}
@@ -118,10 +149,32 @@ class Acesso {
 			echo "<tr>
 	                        <td>$codigo</td>
 	                        <td>$titulo</td>
-	                        <td style='text-align: right;'><a href=''><i class='material-icons'>mode_edit</i></a></td>
-	                        <td style='text-align: right;'><a href=''><i class='material-icons'>delete_forever</i></a></td>
+	                        <td style='text-align: right;'></td>
+	                        <td style='text-align: right;'><a href='deletaDados.php?tipo=2&codigo=$codigo'><i class='material-icons'>delete_forever</i></a></td>
 	                      </tr>";
 	    }
+	}
+
+	function cadastraTag($titulo)
+	{
+		global $con;
+
+		$query ="INSERT INTO tags (nome) VALUES ('$titulo')";
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		return 1;
+	}
+
+	function cadastraCategoria($titulo)
+	{
+		global $con;
+
+		$query ="INSERT INTO categorias (nome) VALUES ('$titulo')";
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		return 1;
 	}
 
 	function buscaUserById($id)
@@ -140,6 +193,29 @@ class Acesso {
 
 			echo $nome;
 		}
+	}
+
+	function deletaDados($id, $tipo)
+	{
+		global $con;
+
+		switch($tipo)
+		{
+			case '0':
+					$query ="DELETE  FROM posts WHERE id='$id'";
+					break;
+			case '1':
+					$query ="DELETE  FROM categorias WHERE id='$id'";
+					break;
+			case '2':
+					$query ="DELETE  FROM tags WHERE id='$id'";
+					break;
+		}
+
+		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
+
+		return 1;
+
 	}
 
 	function buscaApelidoByCode($id)
@@ -551,7 +627,7 @@ class Acesso {
 		}
 	}
 
-	function buscaSelectCategorias()
+	function buscaSelectCategorias($codigo = -1)
 	{
 		global $con;
 
@@ -565,7 +641,10 @@ class Acesso {
 			$id = $linha['id'];
 			$nome = $linha['nome'];
 
-			echo "<option value='$id'>$nome</option>";
+			if(($codigo > -1) && ($codigo == $id))
+				echo "<option selected value='$id'>$nome</option>";
+			else
+				echo "<option value='$id'>$nome</option>";
 		}
 	}
 
@@ -733,6 +812,8 @@ class Acesso {
 		$query ="INSERT INTO posts(foto, titulo, texto, categoria, usuario, data_publicacao, fotoPreview, textoPreview) VALUES ('$foto','$titulo','$texto','$cat','$usuario',CURDATE(),'$fotoPreview','$textoPreview')";
 
 		$resultado = mysqli_query($con,$query) or die("erro efetuando cadastro de post".mysqli_error($con));
+
+		return 2;
 	}
 
 }

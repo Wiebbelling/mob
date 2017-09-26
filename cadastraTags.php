@@ -1,47 +1,47 @@
 <?php
 include "acesso.php";
-$acesso = new Acesso;
+
+$acesso = new acesso;
 $acesso->conectar();
 
-// session_start();
-// session_name("adm");
+$acesso->conectar();
 
-// if(isset($_SESSION['validacao']))
-// {
-//   if($_SESSION['validacao'] != 1 || !isset($_SESSION['codigo']))
-//     header("Location:login.php");
-// }
-// else
-// {
-//   header("Location:login.php"); 
-// }
+session_start();
+session_name("adm");
 
-if(isset($_GET['status']))
-  $status = $_GET['status'];
+if(isset($_SESSION['validacao']) && isset($_SESSION['codigo']))
+{
+	if($_SESSION['validacao'] != 1)
+		header("Location:login.php");
+}
+
+if(isset($_POST['titulo']))
+{
+	$titulo = $_POST['titulo'];
+
+	$ret = $acesso->cadastraTag($titulo);
+}
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en" class="wide wow-animation">
   <head>
     <!-- Site Title-->
-    <title>Posts</title>
+    <title>Cadastro de Tags</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <!-- Stylesheets-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900,300italic">
     <link rel="stylesheet" href="css/style.css">
-    <!--[if lt IE 10]>
-    <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
-    <script src="js/html5shiv.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+	</head>
+	<body>
     <!-- Page-->
     <div class="page">
       <!-- Page Header-->
@@ -152,20 +152,20 @@ if(isset($_GET['status']))
                   <!-- RD Navbar Nav-->
                   <ul class="rd-navbar-nav">
                     <li><a href="index.html">Home</a></li>
-                    <li class="active"><a href="listaposts.php">Posts</a>
-                      <ul class="rd-navbar-dropdown">
+                    <li><a href="listaposts.php">Posts</a>
+                    	<ul class="rd-navbar-dropdown">
                           <li><a href="cadastroPost.php">Novo Post</a></li>
                       </ul>
                     </li>
                     <li><a href="listacategorias.php">Categorias</a>
-                      <ul class="rd-navbar-dropdown">
+                    	<ul class="rd-navbar-dropdown">
                           <li><a href="cadastraCategorias.php">Nova Categoria</a></li>
                       </ul>
                     </li>
-                    <li><a href="listatags.php">Tags</a>
-                    <ul class="rd-navbar-dropdown">
-                          <li><a href="cadastraTags.php">Nova Tag</a></li>
-                      </ul>
+                    <li  class="active"><a href="listatags.php">Tags</a>
+                    	<ul class="rd-navbar-dropdown">
+                        	<li><a href="cadastrsTags.php">Nova Tag</a></li>
+                    	</ul>
                     </li>
                   </ul>
                 </div>
@@ -175,36 +175,32 @@ if(isset($_GET['status']))
         </div>
       </header>
 
-      <!-- mensagens de alertas -->
-      <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-      <?php if(isset($status))
+	<body>
+	<!-- Page-->
+    <div class="page">
+      <!-- Page Header-->
+      <!-- Page Content-->
+      <main class="page-content">
+
+
+<!-- mensagens de alertas -->
+      <div class="row" style="margin-top: 30px;">
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+      <?php if(isset($ret))
       {
 
-            switch ($status) {
+            switch ($ret) {
               case '1':
                 echo "<div class='alert alert-success alert-dismissible' role='alert'>
                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Sucesso!</strong> Post deletado com sucesso!
-                      </div>";
-                break;
-                case '2':
-                echo "<div class='alert alert-success alert-dismissible' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Sucesso!</strong> Post cadastrado com sucesso!
-                      </div>";
-                break;
-                case '3':
-                echo "<div class='alert alert-success alert-dismissible' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Sucesso!</strong> Post salvo com sucesso!
+                      <strong>Sucesso!</strong> Tag cadastrada com sucesso!
                       </div>";
                 break;
               case '0':
                 echo "<div class='alert alert-danger alert-dismissible' role='alert'>
                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Erro!</strong> Algum erro aconteceu ao deletar o post!
+                      <strong>Erro!</strong> Algum erro aconteceu ao cadastrar a tag!
                       </div>";
                 break;
             }
@@ -213,34 +209,45 @@ if(isset($_GET['status']))
       </div>
     </div>
 
+    	<div class="row" style="text-align: center; margin-top: 20px;"><h3>Cadastro de Tags</h3></div>
+        <!-- Login form-->
+        <section class="section-50 section-sm-bottom-85">
+          <div class="shell text-center">
+            <div class="range range-xs-center">
+              <div class="cell-xs-10 cell-sm-6">
+                <div class="inset-sm-left-15 inset-sm-right-25 offset-top-22">
+                  <form method="post" action="" id="cadastroTagsForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label for="titulo" class="form-label-outside"><h6>Título:</h6></label>
+                      <input id="titulo" type="text" name="titulo" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-sm btn-curious-blue-outline btn-icon" type="submit">Cadastrar</button> 
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-<div class="row" style="text-align: center; margin-top: 20px;"><h3>Posts</h3></div>
+        <!-- <i class="material-icons">save</i> -->
 
-<div class="row">
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <div class="cell-xs-12 offset-top-38">
-      <div class="table-mobile">
-        <table class="table table-athens-gray table-hover">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Título</th>
-              <th>Autor</th>
-              <th>Categoria</th>
-              <th>Data</th>
-              <th class="col-md-1"><a href="cadastroPost.php"><button class="btn btn-sm btn-curious-blue-outline btn-icon">Novo</button></a></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php $acesso->listaPosts(); ?>
-          </tbody>
-        </table>
-      </div>
+        <!-- Feedback Form-->
+        
+
+      </main>
+      <!-- Page Footer-->
+
     </div>
-  </div>
-</div>
-
+    <!-- Global Mailform Output-->
+    <div id="form-output-global" class="snackbars"></div>
+    <!-- includes:olark-->
+    <!-- Javascript-->
     <script src="js/core.min.js"></script>
     <script src="js/script.js"></script>
+        </body>
+
+
+
+	</body>

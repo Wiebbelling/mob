@@ -15,6 +15,10 @@ else
 {
   header("Location:login.php"); 
 }
+
+if(isset($_GET['status']))
+  $status = $_GET['status'];
+
 ?>
 
 
@@ -148,9 +152,21 @@ else
                   <!-- RD Navbar Nav-->
                   <ul class="rd-navbar-nav">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="listaposts.php">Posts</a></li>
-                    <li class="active"><a href="listacategorias.php">Categorias</a></li>
+                    <li><a href="listaposts.php">Posts</a>
+                      <ul class="rd-navbar-dropdown">
+                          <li><a href="cadastroPost.php">Novo Post</a></li>
+                      </ul>
+                    </li>
+                    <li class="active"><a href="listacategorias.php">Categorias</a>
+                      <ul class="rd-navbar-dropdown">
+                          <li><a href="cadastraCategorias.php">Nova Categoria</a></li>
+                      </ul>
+                    </li>
                     <li><a href="listatags.php">Tags</a>
+                    <ul class="rd-navbar-dropdown">
+                          <li><a href="cadastraTags.php">Nova Tag</a></li>
+                      </ul>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -158,6 +174,34 @@ else
           </nav>
         </div>
       </header>
+      <!-- mensagens de alertas -->
+      <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+      <?php 
+      if(isset($status))
+      { 
+
+            switch ($status) {
+              case '1':
+                echo "<div class='alert alert-success alert-dismissible' role='alert'>
+                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                      <strong>Sucesso!</strong> Categoria deletada com sucesso!
+                      </div>";
+                break;
+              case '0':
+                echo "<div class='alert alert-danger alert-dismissible' role='alert'>
+                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                      <strong>Erro!</strong> Algum erro aconteceu ao deletar a categoria!
+                      </div>";
+                break;
+            }
+          }
+      ?>
+      </div>
+    </div>
+
+
 <div class="row" style="text-align: center; margin-top: 20px;">
         <h3>Categorias</h3>
       </div>
@@ -170,7 +214,7 @@ else
                       <tr>
                         <th class="col-md-1">Código</th>
                         <th class="col-md-9">Título</th>
-                        <th class="col-md-1"><button class="btn btn-sm btn-curious-blue-outline btn-icon">Novo</button></th>
+                        <th class="col-md-1"><a href="cadastraCategorias.php"><button class="btn btn-sm btn-curious-blue-outline btn-icon">Novo</button></a></th>
                         <th class="col-md-1"></th>
                       </tr>
                     </thead>

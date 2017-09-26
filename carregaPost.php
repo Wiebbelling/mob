@@ -1,47 +1,89 @@
 <?php
 include "acesso.php";
-$acesso = new Acesso;
+$acesso = new acesso;
 $acesso->conectar();
 
-// session_start();
-// session_name("adm");
+session_start();
+session_name("adm");
 
-// if(isset($_SESSION['validacao']))
-// {
-//   if($_SESSION['validacao'] != 1 || !isset($_SESSION['codigo']))
-//     header("Location:login.php");
-// }
-// else
-// {
-//   header("Location:login.php"); 
-// }
+if(isset($_SESSION['validacao']))
+{
+  if($_SESSION['validacao'] != 1 || !isset($_SESSION['codigo']))
+    header("Location:login.php");
+}
+else
+{
+  header("Location:login.php"); 
+}
 
-if(isset($_GET['status']))
-  $status = $_GET['status'];
+if(    isset($_POST['titulo'])
+    && isset($_POST['codigo']) 
+    && isset($_POST['texto']) 
+    && isset($_POST['categoria']) 
+    && isset($_POST['categoria']) 
+    && isset($_POST['textoPreview']) 
+    && isset($_FILES['foto']) 
+    && isset($_FILES['fotoPreview']))
+{
+
+
+  $imagemPrincipal = "images/".$_FILES["foto"]["name"];
+  $imagemPreview = "images/".$_FILES['fotoPreview']['name'];
+
+  move_uploaded_file($_FILES["foto"]["tmp_name"], $imagemPrincipal);
+  move_uploaded_file($_FILES['fotoPreview']["tmp_name"], $imagemPreview);
+
+  $ret = $acesso->salvaCase($_POST['codigo'], $imagemPrincipal, $_POST['titulo'], $_POST['categoria'], $_POST['texto'], $_SESSION['codigo'], $imagemPreview, $_POST['textoPreview']);
+
+  // $ret = $acesso->cadastraNovoCase($imagemPrincipal, $_POST['titulo'], $_POST['categoria'], $_POST['texto'], $_SESSION['codigo'], $imagemPreview, $_POST['textoPreview']);
+
+
+  header("Location:listaposts.php?status=$ret");
+
+
+  // echo "Vai cadastrar:<br>";
+  // echo "Titulo: ".$_POST['titulo'];
+  // echo "<br>Texto: ".$_POST['texto'];
+  // echo "<br>Categoria: ".$_POST['categoria'];
+  // echo "<br>Texto Preview: ".$_POST['textoPreview'];
+  // echo "<br>Usuário: ".$_SESSION['codigo'];
+  // echo "Foto Principal: ".$_FILES['foto']['name'];
+  // echo "Foto Preview: ".$_FILES['fotoPreview']['name'];
+}
+
+if(isset($_GET['codigo']))
+{
+  $resultado = $acesso->carregaPostById($_GET['codigo']);
+}
+else
+{
+  header("Location:listaposts.php");
+}
 
 ?>
+
 
 
 <!DOCTYPE html>
 <html lang="en" class="wide wow-animation">
   <head>
     <!-- Site Title-->
-    <title>Posts</title>
+    <title>Edição de Posts</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <!-- Stylesheets-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900,300italic">
     <link rel="stylesheet" href="css/style.css">
-    <!--[if lt IE 10]>
-    <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
-    <script src="js/html5shiv.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+	</head>
+
+
+<body>
     <!-- Page-->
     <div class="page">
       <!-- Page Header-->
@@ -174,73 +216,80 @@ if(isset($_GET['status']))
           </nav>
         </div>
       </header>
+      <div class="row" style="text-align: center; margin-top: 20px;"><h3>Edição de Posts</h3></div>
+        <!-- Login form-->
+        <section class="section-50 section-sm-bottom-85">
+          <div class="shell text-center">
+            <div class="range range-xs-center">
+              <div class="cell-xs-10 cell-sm-6 offset-top-25">
+                <div class="inset-sm-left-15 inset-sm-right-25 offset-top-22">
+                  <form method="post" action="" id="cadastroPostForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label for="codigo" class="form-label-outside"><h6>Código</h6></label>
+                      <input id="codigo" type="text" name="codigo" class="form-control" <?php echo "value='".$resultado['id']."'";?> readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="foto" class="form-label-outside"><h6>Foto(870x412):</h6></label><br>
+                      <label class="btn btn-default btn-file btn-curious-blue-variant-2">
+                          Selecionar Arquivo <input type="file" id="foto" name="foto" style="display: none;">
+                      </label>
+                    </div>
+                    Arquivo atual: <?php echo $resultado['foto']; ?>
+                    <div class="form-group">
+                      <label for="titulo" class="form-label-outside"><h6>Título:</h6></label>
+                      <input id="titulo" type="text" name="titulo" class="form-control" <?php echo "value='".$resultado['titulo']."'";?>>
+                    </div>
+                    <div class="form-group">
+                      <label for="texto" class="form-label-outside"><h6>Texto:</h6></label>
+                      <textarea name="texto" form="cadastroPostForm" class="form-control"> <?php echo $resultado['texto'];?></textarea>
+                    </div>
+                  	<div class="form-group">
+                      <label for="categoira" class="form-label-outside"><h6>Categoria:</h6></label>
+                      <select id="categoira" name="categoria">
+                       <?php 
+                        $acesso->buscaSelectCategorias($resultado['categoria']);
+                        ?>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="fotoPreview" class="form-label-outside"><h6>Foto Preview(70x70):</h6></label><br>
+                      <label class="btn btn-default btn-file btn-curious-blue-variant-2">
+                          Selecionar Arquivo <input type="file" id="fotoPreview" name="fotoPreview" style="display: none;">
+                      </label>
 
-      <!-- mensagens de alertas -->
-      <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-10">
-      <?php if(isset($status))
-      {
+                    </div>
+                    Arquivo atual: <?php echo $resultado['fotoPreview']; ?>
+                    <div class="form-group">
+                      <label for="textoPreview" class="form-label-outside"><h6>Texto de Preview:</h6></label>
+                      <textarea name="textoPreview" form="cadastroPostForm" class="form-control"> <?php echo $resultado['textoPreview']; ?></textarea>
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-sm btn-curious-blue-variant-2" type="submit">Salvar</button> 
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-            switch ($status) {
-              case '1':
-                echo "<div class='alert alert-success alert-dismissible' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Sucesso!</strong> Post deletado com sucesso!
-                      </div>";
-                break;
-                case '2':
-                echo "<div class='alert alert-success alert-dismissible' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Sucesso!</strong> Post cadastrado com sucesso!
-                      </div>";
-                break;
-                case '3':
-                echo "<div class='alert alert-success alert-dismissible' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Sucesso!</strong> Post salvo com sucesso!
-                      </div>";
-                break;
-              case '0':
-                echo "<div class='alert alert-danger alert-dismissible' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                      <strong>Erro!</strong> Algum erro aconteceu ao deletar o post!
-                      </div>";
-                break;
-            }
-          }
-      ?>
-      </div>
+        <!-- <i class="material-icons">save</i> -->
+
+        <!-- Feedback Form-->
+        
+
+      </main>
+      <!-- Page Footer-->
+
     </div>
-
-
-<div class="row" style="text-align: center; margin-top: 20px;"><h3>Posts</h3></div>
-
-<div class="row">
-  <div class="col-md-1"></div>
-  <div class="col-md-10">
-    <div class="cell-xs-12 offset-top-38">
-      <div class="table-mobile">
-        <table class="table table-athens-gray table-hover">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Título</th>
-              <th>Autor</th>
-              <th>Categoria</th>
-              <th>Data</th>
-              <th class="col-md-1"><a href="cadastroPost.php"><button class="btn btn-sm btn-curious-blue-outline btn-icon">Novo</button></a></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php $acesso->listaPosts(); ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
+    <!-- Global Mailform Output-->
+    <div id="form-output-global" class="snackbars"></div>
+    <!-- includes:olark-->
+    <!-- Javascript-->
     <script src="js/core.min.js"></script>
     <script src="js/script.js"></script>
+        </body>
+
+
+
+	</body>
