@@ -1,6 +1,6 @@
 <?php
 
-$recipients = 'test@demolink.com';
+$recipients = 'teste@gmail.com';
 
 try {
     require './phpmailer/PHPMailerAutoload.php';
@@ -71,6 +71,9 @@ try {
 
     $mail = new PHPMailer();
     $mail->From = $_POST['email'];
+    $mail->isSMTP();
+
+
 
     if (isset($_POST['name'])){
         $mail->FromName = $_POST['name'];

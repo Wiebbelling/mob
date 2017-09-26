@@ -23,7 +23,7 @@ class Acesso {
 
 		// $con = mysqli_connect("mysql.hostinger.com.br","u580826224_mob","123456","u580826224_mob") or die ("erro".mysqli_error($con));
 
-		$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
+		$con = mysqli_connect("localhost","root","123456","mob") or die ("erro".mysqli_error($con));
 
 		return $con;
 

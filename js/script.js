@@ -456,7 +456,7 @@ $document.ready(function () {
    * @description Enables RD Google Maps plugin
    */
   if (plugins.rdGoogleMaps.length) {
-    $.getScript("//maps.google.com/maps/api/js?sensor=false&libraries=geometry,places&v=3.7", function () {
+    $.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBEt5v1vu7fUyZ70SxIhKS8Mi23ffqqrwg&sensor=false&libraries=geometry,places&v=3.7", function () {
       var head = document.getElementsByTagName('head')[0],
           insertBefore = head.insertBefore;
 
