@@ -10900,6 +10900,16 @@ address {
   color: #2e2e2e;
 }
 
+.teste
+{
+  color: #666;
+}
+
+.teste:hover
+{
+  color: #1b7ca5;
+}
+
 .page .text-gray {
   color: #666;
 }
@@ -10942,7 +10952,7 @@ address {
 
 .page a.text-white:hover,
 .page a.text-white:focus {
-  color: #e6e6e6;
+  color: #1b7ca5;
 }
 
 .page .text-river-bed {

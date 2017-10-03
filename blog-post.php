@@ -99,7 +99,7 @@ else
                           </figure>
                         </div>
                         <div class="unit-body">
-                          <address class="contact-info"><a href="#"><span class="text-bold text-white">Av. Carlos Gomes 141/1004</span><span class="text-white">Porto Alegre, RS</span></a></address>
+                          <address class="contact-info"><a href="#" class="text-white"><span class="text-bold">Av. Carlos Gomes 141/1004</span><span>Porto Alegre, RS</span></a></address>
                         </div>
                       </div>
                     </li>
