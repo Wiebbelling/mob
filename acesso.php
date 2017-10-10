@@ -21,9 +21,9 @@ class Acesso {
 
 		global $con;
 
-		// $con = mysqli_connect("mysql.hostinger.com.br","u580826224_mob","123456","u580826224_mob") or die ("erro".mysqli_error($con));
+		$con = mysqli_connect("mysql.hostinger.com.br","u580826224_mob","123456","u580826224_mob") or die ("erro".mysqli_error($con));
 
-		$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
+		//$con = mysqli_connect("localhost","root","123456","mob") or die ("erro".mysqli_error($con));
 
 		return $con;
 
@@ -98,8 +98,10 @@ class Acesso {
 	function salvaCase($id, $foto, $titulo, $cat, $texto, $usuario, $fotoPreview, $textoPreview)
 	{
 		global $con;
-		$titulo =  str_replace("'"," ",$titulo);
-		$texto =  str_replace("'"," ",$texto);
+		$titulo =  str_replace("'","&#39;",$titulo);
+		$titulo = str_replace("\"","&#34;",$titulo);
+		$texto =  str_replace("'","&#39;",$texto);
+		$texto = str_replace("\"","&#34;",$texto);
 		$textoPreview =  str_replace("'"," ",$textoPreview);
 
 		$query = "UPDATE posts SET foto='$foto',titulo='$titulo',texto='$texto',categoria='$cat',usuario='$usuario',data_publicacao=CURDATE(),fotoPreview='$fotoPreview',textoPreview='$textoPreview' WHERE id='$id'";
@@ -158,6 +160,9 @@ class Acesso {
 	function cadastraTag($titulo)
 	{
 		global $con;
+
+		$titulo = str_replace("'", "&#39;", $titulo);
+		$titulo = str_replace("\"", "&#34;", $titulo);
 
 		$query ="INSERT INTO tags (nome) VALUES ('$titulo')";
 
