@@ -23,7 +23,7 @@ class Acesso {
 
 		$con = mysqli_connect("mysql.hostinger.com.br","u580826224_mob","123456","u580826224_mob") or die ("erro".mysqli_error($con));
 
-		//$con = mysqli_connect("localhost","root","123456","mob") or die ("erro".mysqli_error($con));
+		//$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
 
 		return $con;
 
@@ -416,12 +416,6 @@ class Acesso {
 		                      </li>
 		                      <li>
 		                        <dl class='list-terms-inline'>
-		                          <dt>Comments</dt>
-		                          <dd>2</dd>
-		                        </dl>
-		                      </li>
-		                      <li>
-		                        <dl class='list-terms-inline'>
 		                          <dt>Category</dt>
 		                          <dd>$categoria</dd>
 		                        </dl>
@@ -498,12 +492,6 @@ class Acesso {
 	                      </li>
 	                      <li>
 	                        <dl class='list-terms-inline'>
-	                          <dt>Comments</dt>
-	                          <dd>2</dd>
-	                        </dl>
-	                      </li>
-	                      <li>
-	                        <dl class='list-terms-inline'>
 	                          <dt>Category</dt>
 	                          <dd>$categoria</dd>
 	                        </dl>
@@ -574,12 +562,6 @@ class Acesso {
 		                        <dl class='list-terms-inline'>
 		                          <dt>Posted by</dt>
 		                          <dd>$user</dd>
-		                        </dl>
-		                      </li>
-		                      <li>
-		                        <dl class='list-terms-inline'>
-		                          <dt>Comments</dt>
-		                          <dd>2</dd>
 		                        </dl>
 		                      </li>
 		                      <li>
@@ -722,12 +704,6 @@ class Acesso {
 		                      </li>
 		                      <li>
 		                        <dl class='list-terms-inline'>
-		                          <dt>Comments</dt>
-		                          <dd>2</dd>
-		                        </dl>
-		                      </li>
-		                      <li>
-		                        <dl class='list-terms-inline'>
 		                          <dt>Category</dt>
 		                          <dd>$categoria</dd>
 		                        </dl>
@@ -800,7 +776,7 @@ class Acesso {
                                       $titulo
                                       </a></p>
                                   <div class='post-preview-meta'>
-                                    <time datetime='2016-02-04'>$data</time><span>4 Comments</span>
+                                    <time datetime='2016-02-04'>$data</time>
                                   </div>
                                 </div>
                               </div>
