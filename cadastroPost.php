@@ -30,6 +30,9 @@ if(    isset($_POST['titulo'])
   $imagemPrincipal = "images/".$date.$_FILES["foto"]["name"];
   $imagemPreview = "images/".$date.$_FILES['fotoPreview']['name'];
 
+  // $imagemPrincipal = "images/".$_FILES["foto"]["name"];
+  // $imagemPreview = "images/".$_FILES['fotoPreview']['name'];
+
   move_uploaded_file($_FILES["foto"]["tmp_name"], $imagemPrincipal);
   move_uploaded_file($_FILES['fotoPreview']["tmp_name"], $imagemPreview);
 
