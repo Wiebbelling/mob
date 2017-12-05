@@ -1,4 +1,5 @@
 <?php
+
 include "acesso.php";
 $acesso = new acesso;
 $acesso->conectar();
@@ -25,9 +26,12 @@ if(    isset($_POST['titulo'])
     && isset($_FILES['fotoPreview']))
 {
 
+  $date = date('d-m-Y', time());
+  $imagemPrincipal = "images/".$date.$_FILES["foto"]["name"];
+  $imagemPreview = "images/".$date.$_FILES['fotoPreview']['name'];
 
-  $imagemPrincipal = "images/".$_FILES["foto"]["name"];
-  $imagemPreview = "images/".$_FILES['fotoPreview']['name'];
+  // $imagemPrincipal = "images/".$_FILES["foto"]["name"];
+  // $imagemPreview = "images/".$_FILES['fotoPreview']['name'];
 
   move_uploaded_file($_FILES["foto"]["tmp_name"], $imagemPrincipal);
   move_uploaded_file($_FILES['fotoPreview']["tmp_name"], $imagemPreview);

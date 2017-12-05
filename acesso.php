@@ -25,6 +25,7 @@ class Acesso {
 
 		//$con = mysqli_connect("localhost","root","","mob") or die ("erro".mysqli_error($con));
 
+		//$con = mysqli_connect("localhost","root","123456","mob") or die ("erro".mysqli_error($con));
 		return $con;
 
 	}
@@ -54,7 +55,7 @@ class Acesso {
 		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 				FROM posts 
 				LEFT JOIN categorias ON categorias.id = posts.categoria 
-				LEFT JOIN usuarios ON usuarios.id = posts.usuario";
+				LEFT JOIN usuarios ON usuarios.user = posts.usuario";
 		
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 
@@ -85,7 +86,7 @@ class Acesso {
 		$query ="SELECT posts.id, posts.categoria, texto, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview, fotoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.usuario 
+			LEFT JOIN usuarios ON usuarios.user = posts.usuario 
 			WHERE posts.id='$id'";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -372,7 +373,7 @@ class Acesso {
 		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 				FROM posts 
 				LEFT JOIN categorias ON categorias.id = posts.categoria 
-				LEFT JOIN usuarios ON usuarios.id = posts.usuario  
+				LEFT JOIN usuarios ON usuarios.user = posts.usuario  
 				ORDER BY data_publicacao DESC LIMIT 4 OFFSET $offset;";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -388,7 +389,7 @@ class Acesso {
 			$categoria = $linha['nome'];
 			$texto = $linha['textoPreview'];
 
-
+			echo $foto;
 			echo "
 						<article class='post'>
 		                  <div class='post-image'>
@@ -448,7 +449,7 @@ class Acesso {
 	$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.usuario  
+			LEFT JOIN usuarios ON usuarios.user = posts.usuario  
 			ORDER BY data_publicacao DESC;";
 
 	$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -523,7 +524,7 @@ class Acesso {
 		$query ="SELECT posts.id, texto, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.usuario 
+			LEFT JOIN usuarios ON usuarios.user = posts.usuario 
 			WHERE posts.id='$id'";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -661,7 +662,7 @@ class Acesso {
 		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, categorias.nome,textoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.usuario
+			LEFT JOIN usuarios ON usuarios.user = posts.usuario
 			WHERE categoria = '$categoria' LIMIT 4 OFFSET $offset;";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
@@ -745,7 +746,7 @@ class Acesso {
 		$query ="SELECT posts.id, titulo, foto, data_publicacao, apelido, texto, categorias.nome,textoPreview,fotoPreview
 			FROM posts 
 			LEFT JOIN categorias ON categorias.id = posts.categoria 
-			LEFT JOIN usuarios ON usuarios.id = posts.usuario ORDER BY data_publicacao DESC";
+			LEFT JOIN usuarios ON usuarios.user = posts.usuario ORDER BY data_publicacao DESC";
 
 		$resultado = mysqli_query($con,$query) or die("erro de consulta".mysqli_error($con));
 
